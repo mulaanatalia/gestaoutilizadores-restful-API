@@ -1,5 +1,6 @@
 package com.anataliamula.gestaoutlizadores.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,13 @@ public class TaskService {
 				)); 		
 	}
 	
+	
+	//retorna uma lista de tareas de um usuário
+	public List<Task> findAllByUserId(Long userId){
+		List<Task> tasks = this.taskRepository.findByUser_Id(userId);
+		return tasks;
+	}
+	
 	@Transactional
 	public Task create(Task obj) {
 		//precisamos verificar se o user existe ou não
@@ -36,6 +44,8 @@ public class TaskService {
 		obj = this.taskRepository.save(obj);
 		return obj;
 	}
+	
+	
 	
 	@Transactional
 	public Task update(Task obj) {
