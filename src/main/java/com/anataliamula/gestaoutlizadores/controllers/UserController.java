@@ -45,6 +45,7 @@ public class UserController {
 	public ResponseEntity<Void> create(@Valid @RequestBody User obj) {
 		this.userService.create(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		//created-para retornar o 201 no Postman, uri-para retornar o caminho
 		return ResponseEntity.created(uri).build();
 	}
 
