@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.anataliamula.gestaoutlizadores.models.Task;
 import com.anataliamula.gestaoutlizadores.models.User;
 import com.anataliamula.gestaoutlizadores.repositories.TaskRepository;
+import com.anataliamula.gestaoutlizadores.services.exceptions.DataBindingViolationException;
+import com.anataliamula.gestaoutlizadores.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class TaskService {
@@ -23,7 +25,7 @@ public class TaskService {
 	public Task findById(Long id) {
 		Optional<Task> task = this.taskRepository.findById(id); //para evitar receber null/evitar erros
 		//Apenas retorna o user se ele estiver preenchido/nao for null - caso não, lança uma excepção
-		return task.orElseThrow(() -> new RuntimeException(
+		return task.orElseThrow(() -> new ObjectNotFoundException (
 				"Tarefa não encontrado! Id: " + id + ", Tipo: " + Task.class.getName()
 				)); 		
 	}
@@ -61,7 +63,7 @@ public class TaskService {
 		try {
 			this.taskRepository.deleteById(id);
 		}catch(Exception e) {
-			throw new RuntimeException("Não é possível excluir pois há entidades relacionadas!");
+			throw new DataBindingViolationException ("Não é possível excluir pois há entidades relacionadas!");
 		}
 	}
 	

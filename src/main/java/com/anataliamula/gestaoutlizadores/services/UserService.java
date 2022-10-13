@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anataliamula.gestaoutlizadores.models.User;
 import com.anataliamula.gestaoutlizadores.repositories.UserRepository;
+import com.anataliamula.gestaoutlizadores.services.exceptions.DataBindingViolationException;
+import com.anataliamula.gestaoutlizadores.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -20,7 +22,7 @@ public class UserService {
 	public User findById(Long id) {
 		Optional<User> user = this.userRepository.findById(id); //para evitar receber null/evitar erros
 		//Apenas retorna o user se ele estiver preenchido/nao for null - caso não, lança uma excepção
-		return user.orElseThrow(() -> new RuntimeException(
+		return user.orElseThrow(() -> new ObjectNotFoundException(
 				"Utilizador não encontrado! Id: " + id + ", Tipo: " + User.class.getName()
 				)); 		
 	}
@@ -44,7 +46,7 @@ public class UserService {
 		try {			
 			this.userRepository.deleteById(id); //se tiver vinculado a uma tabela não será possivel
 		}catch(Exception e) {
-			throw new RuntimeException("Não é possível excluir pois há entidades relacionadas!");
+			throw new DataBindingViolationException ("Não é possível excluir pois há entidades relacionadas!");
 		}
 	}
 	
